@@ -95,7 +95,7 @@ exports.createCourse = async (req, res) => {
 
 
 // now we will create a handler function for getAllCourses
-exports.showAllCourses = async (req, res) => {
+exports.getAllCourses = async (req, res) => {
     try {
         // fetch all the courses
         const allCourses = await Course.find({}, 
@@ -125,3 +125,57 @@ exports.showAllCourses = async (req, res) => {
         })
     }
 }
+
+
+
+// creation of getCourseDetails Handler Function  -->> in this we want Entire Data without objectId only want actual  data
+exports.getCourseDetails = async (req, res) => {
+    try {
+        // get/fetch id from body
+        const {courseId} = req.body;
+
+        // find course Details
+        const courseDetails = await Course.find(
+            {_id:courseId})
+            .populate(
+                {
+                    path:"instructor",
+                    populate:{
+                        path:"additionalDetails",
+                    },
+                }
+            )
+            .populate("category")
+            .populate("ratingAndReviews")
+            .populate({
+                path:"courseContent",
+                populate: {
+                    path:"subSection",
+                },
+            })
+            .exec();
+
+        // validation
+        if(!courseDetails) {
+            return res.status(400).json({
+                success:false,
+                message: `Could not find the course with ${courseId},`
+            });
+        }
+
+        // return response 
+        return res.status(200).json({
+            success:true,
+            message:"Course Details fetched Successfully",
+            data:courseDetails,
+        })
+
+    }   
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:error.message,
+        });
+    }
+};
