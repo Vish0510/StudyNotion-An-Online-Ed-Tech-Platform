@@ -4,6 +4,8 @@ const otpGenerator = require("otp-generator");
 const bcrypt = require("bcrypt"); 
 const jwt = require("jsonwebtoken");
 const mailSender = require("../utils/mailSender");
+const {passwordUpdate} = require("../mail/templates/passwordUpdate");
+const Profile = require("../models/Profile");
 require("dotenv").config();
 
 
@@ -101,7 +103,7 @@ exports.signUP = async (req, res) => {
         console.log(recentOtp);
 
         // validate OTP
-        if(recentOtp.length == 0) {
+        if(recentOtp.length === 0) {
             // means no OTP found for the email
             return res.status(400).json({
                 success:false,
