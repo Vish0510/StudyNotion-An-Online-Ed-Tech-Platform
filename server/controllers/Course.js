@@ -7,13 +7,13 @@ const {uploadImageToCloudinary} = require('../utils/imageUploader');
 exports.createCourse = async (req, res) => {
     try {
         // fetch course data from request body
-        const { courseName, courseDescription, whatYouWillLearn, price, tag } = req.body;
+        const { courseName, courseDescription, whatYouWillLearn, price, tag, category } = req.body;
 
         // fetch thumbnail image from request files
         const thumbnail = req.files.thumbnailImage;
 
         // validation: check if course with same name already exists
-        if (!courseName || !courseDescription || !whatYouWillLearn || !price || !tag || !thumbnail) {
+        if (!courseName || !courseDescription || !whatYouWillLearn || !price || !tag || !category || !thumbnail) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required"
@@ -34,13 +34,13 @@ exports.createCourse = async (req, res) => {
             });
         }
 
-        // check givem tag is valid or not
-        const tagDetails = await Tag.findById(tag);
+        // check given category is valid or not
+        const categoryDetails = await Tag.findById(category);
         // if no tag found for the given id
-        if (!tagDetails) {
+        if (!categoryDetails) {
             return res.status(404).json({
                 success: false,
-                message: "Tag not found"
+                message: "Category not found"
             });
         }
 
@@ -52,8 +52,10 @@ exports.createCourse = async (req, res) => {
             courseName,
             courseDescription,
             instructor: instructorDetails._id,
-            whatYouWillLearn: whatYouWillLearn,price,
-            tag: tagDetails._id,
+            whatYouWillLearn,
+            price,
+            tag,
+            category: categoryDetails._id,
             thumbnail : thumbnailImage.secure_url,
         });
         console.log("New Course Created: ", newCourse);
@@ -69,7 +71,7 @@ exports.createCourse = async (req, res) => {
 
         // update the TAG schema to include this new course
         await Tag.findByIdAndUpdate(
-            tagDetails._id,
+            categoryDetails._id,
             { $push: { course: newCourse._id } }, 
             { new: true }
         );

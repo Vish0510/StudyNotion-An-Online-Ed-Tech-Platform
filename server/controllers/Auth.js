@@ -34,6 +34,9 @@ exports.sendOTP = async (req, res) => {
 
         // check unique OTP or not
         let result = await OTP.findOne({otp: otp});
+        console.log("Result is Generate OTP Func");
+        console.log("OTP", otp);
+        console.log("Result", result);
 
         while(result) {
             otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
@@ -109,7 +112,7 @@ exports.signUP = async (req, res) => {
                 success:false,
                 message:"OTP not found, Please request for new OTP",
             });
-        } else if(otp != recentOtp.otp) {
+        } else if(otp !== recentOtp[0].otp) {
             // Invalid OTP
             return res.status(400).json({
                 success:false,

@@ -11,7 +11,7 @@ const crypto = require("crypto");
 
 
 // Capture the Payment and initiate the Razorpay order(this handler only the stage of payment creation)
-exports.capturePay.payment = async (req, res) => {    
+exports.capturePayment = async (req, res) => {    
     // get courseId and userId
     const {course_id} = req.body;
     const userId = req.user.id;

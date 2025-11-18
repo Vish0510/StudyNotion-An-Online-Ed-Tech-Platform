@@ -36,6 +36,7 @@ const courseSchema = new mongoose.Schema({
     tag: {
         type: [String],
         required:true,
+        set: value => Array.isArray(value) ? value : [value],
     },
     category: {
         type:mongoose.Schema.Types.ObjectId,

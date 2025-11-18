@@ -95,25 +95,41 @@ exports.deleteSection = async (req, res) => {
     try {
         // fetch data/id
         // here we are sending id in params
-        const {sectionId} = req.params;
+        const {sectionId, courseId} = req.body;
+        console.log("Delete Section Body =>", req.body);
 
         // validation 
-        if(!sectionId) {
+        if(!sectionId || !courseId) {
             return res.status(400).json({
                 success:false,
                 message: 'Something Missing'
             });
         }
 
-        // delete section by findIdAndDelete function
+        // remove section from course content
+        await Course.findByIdAndUpdate(courseId, {
+            $pull: {
+                courseContent: sectionId,
+            },
+        });
+
+        // delete section
         await Section.findByIdAndDelete(sectionId);
 
-        // TODO HOMEWORK(DO in testing time) -->>> Do we need to delete the entry from the course Schema ??????
+        // return updated course
+		const course = await Course.findById(courseId).populate({
+			path:"courseContent",
+			populate: {
+				path: "subSection"
+			},
+		})
+		.exec();
 
         // return  success response
         return res.status(200).json({
             success:true,
             message:'Section Delete Successfully',
+            data:course,
         });         
 
     }
@@ -121,7 +137,8 @@ exports.deleteSection = async (req, res) => {
         console.log(error);
         return res.status(500).json({
             success:false,
-            message: 'Something Error for Section Deletion'
+            message: 'Something Error for Section Deletion',
+            error: error.message,
         });
     }
-}
+};

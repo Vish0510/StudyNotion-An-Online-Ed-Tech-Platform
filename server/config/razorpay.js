@@ -5,5 +5,5 @@ require("dotenv").config();
 // create instance of razorpay
 exports.instance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY,
-    key_secret: process.env.RAZORPAY_SECRER,
+    key_secret: process.env.RAZORPAY_SECRET,
 });
