@@ -4,12 +4,13 @@ import {Link, matchPath} from 'react-router-dom';
 import {NavbarLinks} from '../../data/navbar-links';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai";
 import ProfileDropDown from '../core/Auth/ProfileDropDown';
 import {categories} from '../../services/apis';
 import { apiConnector } from '../../services/apiconnector';
 import { useState } from 'react';
 import { IoMdArrowDropdownCircle } from "react-icons/io";
+//import { BsChevronDown } from "react-icons/bs";
 
 
 
@@ -30,9 +31,11 @@ const Navbar = () => {
     const {token} = useSelector( (state) => state.auth);
     const {user} = useSelector( (state) => state.profile);
     const {totalItems} = useSelector( (state) => state.cart);
+    const location = useLocation();
+
 
     // API call for Catalog -- here we use useEffect() inside that we will API Call
-    //const [subLinks, setSubLinks] = useState([]);
+    // const [subLinks, setSubLinks] = useState([]);
 
     // const fetchSubLinks = async() => {
     //     try {
@@ -46,11 +49,11 @@ const Navbar = () => {
     // }
     
     // useEffect( () => {
+    //     console.log("Printing Token", token);
     //     //fetchSubLinks();
     // }, [] )
 
     
-    const location = useLocation();
     const matchRoute = (route) => {
         return matchPath({path:route}, location.pathname);
     }
