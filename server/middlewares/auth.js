@@ -7,7 +7,12 @@ const user = require('../models/User');
 exports.auth = async (req, res, next) => {
     try {
         // fetch token 
-        const token =  req.cookies.token || req.body.token || req.header("Authorization").replace("Bearer ", "");
+        const authHeader = req.header("Authorization");
+
+        const token =
+                    req.cookies?.token ||
+                    req.body?.token ||
+                    (authHeader && authHeader.replace("Bearer ", ""));
 
         // if token not present
         if(!token) {
