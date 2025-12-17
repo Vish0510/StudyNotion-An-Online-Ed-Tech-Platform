@@ -19,11 +19,13 @@ import { EnrolledCourses } from "./components/core/Dashboard/EnrolledCourses";
 import Cart from "./components/core/Dashboard/Cart";
 import { ACCOUNT_TYPE } from "./utils/constants";
 import { useDispatch, useSelector } from "react-redux";
+import Catalog from "./pages/Catalog";
+
 
 function App() {
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  //const dispatch = useDispatch();
+  //const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.profile);
 
@@ -33,6 +35,7 @@ function App() {
     {/* Here we are creating All Routes */}
     <Routes>
       <Route path="/" element={<Home/>} />  
+      <Route path="catalog/:catalogName" element={<Catalog />} />
       <Route
         path="signup"
         element={
