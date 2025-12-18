@@ -9,13 +9,13 @@ require('dotenv').config();
 exports.createSubSection = async (req, res) => {
     try {
         // fetch data from req.body
-        const {sectionId, title, timeDuration, description} = req.body;
+        const {sectionId, title, description} = req.body;
 
         // extract the file/video
         const video = req.files.videoFile;
 
         // validation
-        if(!sectionId || !title || !description || !video || !timeDuration) {
+        if(!sectionId || !title || !description || !video) {
             return res.status(400).json({
                 success:false,
                 message:'All fields are required',
@@ -28,7 +28,7 @@ exports.createSubSection = async (req, res) => {
         // create a subSection
         const subSectionDetails = await SubSection.create({
             title:title,
-            timeDuration:timeDuration,
+            timeDuration:`${uploadDetails.duration}`,
             description:description,
             videoUrl:uploadDetails.secure_url,
         })

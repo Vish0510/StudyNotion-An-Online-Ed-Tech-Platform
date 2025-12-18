@@ -10,6 +10,12 @@ const crypto = require("crypto");
 
 
 
+
+
+
+
+// This code is for single courses for enrolled but above code is for multiple items/course
+
 // Capture the Payment and initiate the Razorpay order(this handler only the stage of payment creation)
 exports.capturePayment = async (req, res) => {    
     // get courseId and userId

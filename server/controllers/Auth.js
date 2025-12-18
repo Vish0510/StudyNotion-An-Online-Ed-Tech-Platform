@@ -4,7 +4,7 @@ const otpGenerator = require("otp-generator");
 const bcrypt = require("bcrypt"); 
 const jwt = require("jsonwebtoken");
 const mailSender = require("../utils/mailSender");
-const {passwordUpdate} = require("../mail/templates/passwordUpdate");
+const {passwordUpdated} = require("../mail/templates/passwordUpdate");
 const Profile = require("../models/Profile");
 require("dotenv").config();
 
@@ -135,6 +135,7 @@ exports.signUP = async (req, res) => {
             firstName,
             lastName,
             email,
+            contactNumber,
             password:hashedPassword,    
             accountType,
             additionalDetails: profileDetails._id,         // for additional details we need profileDetails  
@@ -280,15 +281,24 @@ exports.changePassword = async (req, res) => {
 
         //8. send mail to user about password update
         try {
-            const email = userDetails.email;
-            const title = "Password Changed Successfully";
-            const body = `<h1>Your password has been changed successfully</h1>
-                          <p>If you did not initiate this change, please contact our support immediately.</p>`;
-
-            await mailSender(email, title, body); // send mail by mailSender function
+            const emailResponse = await mailSender(
+                updatedUserDetails.email,
+                "Password for your account has been updated",
+                passwordUpdated(
+                    updatedUserDetails.email,
+                    `Password updated successfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
+                )
+            )
+            console.log("Email sent successfully:", emailResponse.response)
         }  
         catch (error) {
-            console.log("Error in sending password change mail", error);
+        // If there's an error sending the email, log the error and return a 500 (Internal Server Error) error
+        console.error("Error occurred while sending email:", error)
+        return res.status(500).json({
+            success: false,
+            message: "Error occurred while sending email",
+            error: error.message,
+        })
         }        
 
         //9. return response successfully
@@ -299,10 +309,12 @@ exports.changePassword = async (req, res) => {
 
     }
     catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success:false,
-            message:"Error in changing password, Please try again",
-        })
-    }
+    // If there's an error updating the password, log the error and return a 500 (Internal Server Error) error
+    console.error("Error occurred while updating password:", error)
+    return res.status(500).json({
+      success: false,
+      message: "Error occurred while updating password",
+      error: error.message,
+    })
+  }
 };

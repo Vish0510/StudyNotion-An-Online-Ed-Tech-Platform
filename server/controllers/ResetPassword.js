@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require('bcrypt');
+const crypto = require("crypto");
 
 
 // resetPasswordToken  OR send email
@@ -20,7 +21,7 @@ exports.resetPasswordToken = async (req, res) => {
         }
 
         // generate token for reset password
-        const token = crypto.randomUUID();
+        const token = crypto.randomBytes(20).toString("hex");
 
         // update user by adding token and expiry time
         const updatedDetails = await User.findOneAndUpdate({email: email}, {
@@ -28,6 +29,7 @@ exports.resetPasswordToken = async (req, res) => {
             resetPasswordExpires: Date.now() + 10*60*1000, // 10 minutes
         },
         {new: true});   // to return updated document
+        console.log("DETAILS", updatedDetails);
 
         // create url
         // here we create a frontend link for reset password
@@ -35,8 +37,8 @@ exports.resetPasswordToken = async (req, res) => {
 
         // send mail to user should be contain the link/url
         await mailSender(email, 
-                        "Password Reset Link - StudyNotion",     // subject
-                        `Password reset link (valid for 10 minutes) : ${url}`);   // message
+			            "Password Reset",
+			            `Your Link for email verification is ${url}. Please click this url to reset your password.`);   // message
 
         // return response
         return res.status(200).json({
