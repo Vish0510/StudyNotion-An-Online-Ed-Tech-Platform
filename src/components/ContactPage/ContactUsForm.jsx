@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { useForm } from 'react-hook-form';
-// import { apiConnector } from '../../services/apiConnector';
-// import { contactusEndpoint } from '../../services/apis';
+import { apiConnector } from '../../services/apiconnector';
+import { contactusEndpoint } from '../../services/apis';
 import CountryCode from '../../data/countrycode.json';
 
 
@@ -20,8 +20,8 @@ const ContactUsForm = () => {
         // API call logic here
         try {
             setLoading(true);
-            //const response = await apiConnector("POST", contactusEndpoint.CONTACT_US_API, data);
-            const response = {status:"OK"};
+            const response = await apiConnector("POST", contactusEndpoint.CONTACT_US_API, data);
+            // const response = {status:"OK"};
             console.log("Logging response", response);
             setLoading(false);
         } 
@@ -85,7 +85,7 @@ const ContactUsForm = () => {
 
                 {/* email */}
                 <div className='flex flex-col gap-2'>
-                    <label htmlFor='email' className="lable-style">Email</label>
+                    <label htmlFor='email' className="lable-style">Email Address</label>
                     <input
                         type='email'
                         name='email'
@@ -96,7 +96,7 @@ const ContactUsForm = () => {
                     />
                     {
                         errors.email && (
-                        <span className="-mt-1 text-[12px] text-yellow-100">Please enter your email</span>
+                        <span className="-mt-1 text-[12px] text-yellow-100">Please enter your email address</span>
                         )
                     }
                 </div>

@@ -36,7 +36,7 @@ const ExploreMore = () => {
             <HighlightText style={{display:"inline"}} text={"Power of Code"} />
           </div>
 
-          <p className="text-center text-richblack-300 text-sm font-semibold mt-2">
+          <p className="text-center text-richblack-300 text-lg font-semibold mt-2">
             Learn to Build Anything You Can Imagine
           </p>
         </div>

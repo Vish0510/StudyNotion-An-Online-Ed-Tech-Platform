@@ -32,7 +32,7 @@ exports.createCategory = async (req, res) => {
     catch(error){
         return res.status(500).json({ 
             success: false,
-            message: "Internal Server Error for Category creation" 
+            message: error.message, 
         });
     }   
 };
@@ -42,21 +42,22 @@ exports.createCategory = async (req, res) => {
 // here we are creating getAllCategories handler function
 exports.showAllCategories = async (req, res) => {
     try {
+        console.log("INSIDE SHOW ALL CATEGORIES");
         // fetch all Category from the database
-        const allCategorys = await Category.find({}, {name:true, description:true});     //  return all Categorys which have only name and description
+        const allCategorys = await Category.find({});     //  return all Categorys 
 
         // return success response with all Categorys
-        return res.status(200).json({
+        res.status(200).json({
             success: true,
             message: "All Categorys fetched successfully",
-            allCategorys,
+            data:allCategorys,
         }); 
 
     }
     catch (error) {
         return res.status(500).json({
             success: false,
-            message: "Internal Server Error in fetching all Categorys"
+            message: error.message,
         });
     }
 }
@@ -68,6 +69,7 @@ exports.categoryPageDetails = async(req,res) => {
     try {
         // get category id
         const {categoryId} = req.body;
+        console.log("PRINTING CATEGORY ID: ", categoryId);
 
         if (!categoryId) {
             return res.status(400).json({
@@ -94,7 +96,7 @@ exports.categoryPageDetails = async(req,res) => {
             });
         }
         // handle the case when there are no courses
-        if(selectedCategory.course.length === 0) {
+        if(selectedCategory.courses.length === 0) {
             console.log("No courses found for the Selected category");
             return res.status(404).json({
                 success:false,
@@ -122,11 +124,11 @@ exports.categoryPageDetails = async(req,res) => {
               path: "courses",
               match: { status: "Published" },
               populate: {
-              path: "instructor",
+                path: "instructor",
             },
             })
             .exec()
-            const allCourses = allCategories.flatMap((category) => category.course)
+            const allCourses = allCategories.flatMap((category) => category.courses)
             const mostSellingCourses = allCourses
                 .sort((a, b) => b.sold - a.sold)
                 .slice(0, 10)

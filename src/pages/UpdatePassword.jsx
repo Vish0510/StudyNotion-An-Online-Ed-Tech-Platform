@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetPassword } from '../services/operations/authAPI';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {AiFillEyeInvisible, AiFillEye} from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
@@ -9,6 +9,7 @@ import { BiArrowBack } from 'react-icons/bi';
 
 const UpdatePassword = () => {
 
+    const navigate = useNavigate();    
     const dispatch = useDispatch();
     const location = useLocation();
     
@@ -35,7 +36,7 @@ const UpdatePassword = () => {
     const handleOnSubmit = (e) => {
         e.preventDefault();
         const token = location.pathname.split('/').at(-1);
-        dispatch(resetPassword(password, confirmPassword, token));   // this resetpassword() call for backend
+        dispatch(resetPassword(password, confirmPassword, token, navigate));   // this resetpassword() call for backend
     }
   return (
     <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">

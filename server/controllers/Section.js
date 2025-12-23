@@ -20,7 +20,7 @@ exports.createSection = async (req, res) => {
         const newSection = await Section.create({sectionName});
 
         // update Course Schema with Section's object ID
-        const updatedCourseDetails = await Course.findByIdAndUpdate(courseId, 
+        const updatedCourse = await Course.findByIdAndUpdate(courseId, 
             {
                 $push: {
                     courseContent: newSection._id,
@@ -35,10 +35,10 @@ exports.createSection = async (req, res) => {
         }).exec();
 
         // return response
-        return res.status(200).json({
+        res.status(200).json({
             success:true,
             message:'Section created Successfully',
-            updatedCourseDetails
+            updatedCourse,
         })
 
     }
@@ -60,14 +60,6 @@ exports.updateSection = async (req, res) => {
         //  Data input
         const {sectionName, sectionId, courseId} = req.body;
 
-        // Data Validation
-        if(!sectionName || !sectionId) {
-            return res.status(400).json({
-                success:false,
-                message: 'All fields are required for updating Section'
-            });
-        }
-
         // update Data
         const section = await Section.findByIdAndUpdate(sectionId, {sectionName}, {new:true});
 
@@ -81,7 +73,7 @@ exports.updateSection = async (req, res) => {
             .exec();
 
         // return response
-        return res.status(200).json({
+        res.status(200).json({
             success:true,
             message: section,
 			data:course,

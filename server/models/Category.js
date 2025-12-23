@@ -9,12 +9,15 @@ const categorySchema = new mongoose.Schema({
     description: {
         type: String,
     },
-    course: [
-        {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course',
+    courses:{ 
+        type: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Course',
+            },
+        ],
+        default: [],
     },
-    ]
 });
 
 module.exports = mongoose.model('Category', categorySchema);

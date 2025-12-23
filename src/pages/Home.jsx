@@ -1,4 +1,3 @@
-import React from 'react'
 import { FaArrowRight } from "react-icons/fa";
 import {Link} from "react-router-dom";
 import HighlightText from '../components/core/HomePage/HighlightText';
@@ -10,13 +9,14 @@ import LearningLanguageSection from '../components/core/HomePage/LearningLanguag
 import InstructorSection from '../components/core/HomePage/InstructorSection';
 import Footer from '../components/Common/Footer';
 import ExploreMore from '../components/core/HomePage/ExploreMore';
+// import ReviewSlider from "../components/common/ReviewSlider"
 
 
 const Home = () => {
   return (
     <div>
         {/* Section 1 */}
-        <div className='relative mx-auto flex flex-col w-11/12 max-w-maxContent items-center gap-6 text-white justify-between'>
+        <div className='relative mx-auto flex flex-col w-11/12 max-w-maxContent items-center gap-8 text-white justify-between'>
 
             {/* Instructor Button */}
             <Link to={"/signup"}>
@@ -29,7 +29,7 @@ const Home = () => {
             </Link>  
 
             {/* Heading */}
-            <div className='text-center text-4xl font-semibold mt-3'>  
+            <div className='text-center text-4xl font-semibold mt-2'>  
                 Empower Your Future with 
                 <HighlightText text={"Coding Skills"} />
             </div>
@@ -96,6 +96,7 @@ const Home = () => {
                     }
                     codeColor={"text-yellow-25"}
                     codeblock={`<!DOCTYPE html>\n <html lang="en">\n<head>\n<title>This is myPage</title>\n</head>\n<body>\n<h1><a href="/">Header</a></h1>\n<nav> <a href="/one">One</a> <a href="/two">Two</a> <a href="/three">Three</a>\n</nav>\n</body>`}
+                    backgroundGradient={<div className="codeblock1 absolute"></div>}
                 />
             </div>
 
@@ -126,8 +127,9 @@ const Home = () => {
                             active: false,
                         }
                     }
-                    codeColor={"text-yellow-25"}
+                    codeColor={"text-white"}
                     codeblock={`import React from "react";\n import CTAButton from "./Button";\nimport TypeAnimation from "react-type";\nimport { FaArrowRight } from "react-icons/fa";\n\nconst Home = () => {\nreturn (\n<div>Home</div>\n)\n}\nexport default Home;`}
+                    backgroundGradient={<div className="codeblock2 absolute"></div>}
                 />
             </div>
 
@@ -140,7 +142,7 @@ const Home = () => {
             {/* Part-1 */}
             <div className='homepage_bg h-[320px]'>
                 {/* Explore Full Catagory Section */}
-                <div className='w-11/12 max-w-maxContent flex flex-col items-center gap-6 mx-auto'>
+                <div className='w-11/12 max-w-maxContent flex flex-col items-center gap-8 mx-auto'>
                     <div className='lg:h-[150px]'></div>
                     <div className='flex flex-row gap-7 text-white lg:mt-8'>
                         <CTAButton active={true} linkto={"/signup"}>
@@ -149,7 +151,7 @@ const Home = () => {
                                 <FaArrowRight/>
                             </div>    
                         </CTAButton>
-                        <CTAButton active={false} linkto={"/signup"}>
+                        <CTAButton active={false} linkto={"/login"}>
                             <div>
                                 Learn More
                             </div>
@@ -159,7 +161,8 @@ const Home = () => {
             </div>
 
             {/* Part-2 */}
-            <div className='w-11/12 max-w-maxContent flex flex-col items-center justify-between gap-8 mx-auto'>
+            <div className='mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8'>
+                {/* Job that is in Demand - Section 1 */}
                 <div className='mb-10 mt-[-100px] flex flex-col justify-between gap-7 lg:mt-20 lg:flex-row lg:gap-0'>
                     <div className='text-4xl font-semibold lg:w-[45%]'>
                         Get the Skills you need for a
@@ -187,13 +190,13 @@ const Home = () => {
         </div>
 
         {/* Section 3 */}
-        <div className='relative w-11/12 mx-auto max-w-maxContent flex-col items-center justify-between gap-8 first-letter bg-richblack-900 text-white my-20'>
+        <div className='relative mx-auto my-20 flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 bg-richblack-900 text-white'>
 
             {/* Instructor Section */}
             <InstructorSection/>
 
             {/* Reviws */}
-            <h2 className='text-center text-4xl font-semibold mt-10'>Review from Other Learners</h2>
+            <h2 className='text-center text-4xl font-semibold mt-8'>Review from Other Learners</h2>
 
             {/* Review Slider */}
 

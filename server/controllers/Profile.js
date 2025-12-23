@@ -1,7 +1,7 @@
 const Profile = require('../models/Profile');
 const User = require("../models/User");
 const Course = require("../models/Course");
-const CourseProgress = require("../models/CourseProgress");
+const CourseProgress = require('../models/CourseProgress');
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 const mongoose = require("mongoose");
 const { convertSecondsToDuration } = require("../utils/secToDuration")
@@ -54,6 +54,7 @@ exports.updateProfile = async (req, res) => {
         }); 
  
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             success:false,
             message: 'Internal Error for Updating the Profile',
@@ -70,10 +71,10 @@ exports.deleteAccount = async (req, res) => {
     try {
         // get id
         const id = req.user.id;
-
+        console.log(id)
         // validation
-        const userDetails = await User.findById(id);
-        if(!userDetails) {
+        const user = await User.findById( {_id: id});
+        if(!user) {
             return res.status(404).json({
                 success:false,
                 message:'User not Found',
@@ -81,25 +82,31 @@ exports.deleteAccount = async (req, res) => {
         }
 
         // delete Profile -- in this first we will delete additional details then profile
-        await Profile.findByIdAndDelete({_id:userDetails.additionalDetails});
+        await Profile.findByIdAndDelete({
+          _id: new mongoose.Types.ObjectId(user.additionalDetails),
+        })
 
         // -->>> unroll user from all enrolled courses
-        await Course.updateMany(
-            { studentsEnrolled: id },
-            { $pull: { studentsEnrolled: id } }
-        );
+        for (const courseId of user.courses) {
+          await Course.findByIdAndUpdate(
+             courseId,
+            { $pull: { studentsEnroled: id } },
+            { new: true }
+          )
+        }
 
         // delete user entry
         await User.findByIdAndDelete({_id:id});
 
         // return response
-        return res.status(200).json({
+        res.status(200).json({
             success:true,
             message: 'User Profile and Account Deleted Successfully',
-        }); 
-
+        })
+        await CourseProgress.deleteMany({ userId: id })
     } catch (error) {
-        return res.status(500).json({
+        console.log(error)
+        res.status(500).json({
             success:false,
             message: 'Something went wrong while deleting account',
             error : error.message,
@@ -117,7 +124,7 @@ exports.deleteAccount = async (req, res) => {
 
         // validation and get user details
         const userDetails = await User.findById(id).populate("additionalDetails").exec();
-
+        console.log(userDetails)
         if(!userDetails) {
             return res.status(404).json({
                 success:false,
@@ -126,10 +133,10 @@ exports.deleteAccount = async (req, res) => {
         }
 
         // return response
-        return res.status(200).json({
+        res.status(200).json({
             success:true,
             message: 'User Data fetched Successfully',
-            userDetails,
+            data: userDetails,
         });
 
     } catch (error) {

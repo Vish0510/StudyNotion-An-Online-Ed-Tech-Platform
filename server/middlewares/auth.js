@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const user = require('../models/User');
+const User = require('../models/User');
 
 
 // auth -> in this we check authentication of user
@@ -54,12 +54,14 @@ exports.auth = async (req, res, next) => {
 // isStudent
 exports.isStudent = async (req, res, next) => {
     try {
-        if(req.user.accountType !== "Student") {
-            return res.status(401).json({
-                success:false,
-                message: "This is a protected route for Students only",
-            });
-        } 
+		const userDetails = await User.findOne({ email: req.user.email });
+
+		if (userDetails.accountType !== "Student") {
+			return res.status(401).json({
+				success: false,
+				message: "This is a Protected Route for Students",
+			});
+		} 
         next();
     }
     catch (error){
@@ -75,12 +77,17 @@ exports.isStudent = async (req, res, next) => {
 // isInstructor
 exports.isInstructor = async (req, res, next) => {
     try {
-        if(req.user.accountType !== "Instructor") {
-            return res.status(401).json({
-                success:false,
-                message: "This is a protected route for Instructors only",
-            });
-        }           
+		const userDetails = await User.findOne({ email: req.user.email });
+		console.log(userDetails);
+
+		console.log(userDetails.accountType);
+
+		if (userDetails.accountType !== "Instructor") {
+			return res.status(401).json({
+				success: false,
+				message: "This is a Protected Route for Instructor",
+			});
+		}           
         next();
     }
     catch(error) {
@@ -96,12 +103,14 @@ exports.isInstructor = async (req, res, next) => {
 // isAdmin
 exports.isAdmin = async (req, res, next) => {
     try {
-        if(req.user.accountType !== "Admin") {
-            return res.status(401).json({
-                success:false,
-                message: "This is a protected route for Admins only",
-            });
-        }
+        const userDetails = await User.findOne({ email: req.user.email });
+
+		if (userDetails.accountType !== "Admin") {
+			return res.status(401).json({
+				success: false,
+				message: "This is a Protected Route for Admin",
+			});
+		}
         next();
     }
     catch (error) {

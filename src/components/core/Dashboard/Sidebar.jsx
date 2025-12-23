@@ -17,7 +17,7 @@ const Sidebar = () => {
 
     if(authLoading || profileLoading){
         return(
-            <div className='grid h-[calc(100vh-3.5rem)] min-w-[220px] items-center border-r border-r-richblack-700 bg-richblack-800 md:sticky md:top-0'>
+            <div className='grid h-[calc(100vh-3.5rem)] min-w-[220px] items-center border-r-[1px] border-r-richblack-700 bg-richblack-800'>
             <div className="spinner"></div>
                 Loading...
             </div>
@@ -26,7 +26,7 @@ const Sidebar = () => {
 
   return (
     <>
-        <div className='flex h-[calc(100vh-3.5rem)] min-w-[220px] flex-col border-r border-r-richblack-700 bg-richblack-800 py-10 md:sticky md:top-0'>
+        <div className='flex h-[calc(100vh-3.5rem)] min-w-[220px] flex-col border-r-[1px]  border-r-richblack-700 bg-richblack-800 py-10 md:sticky md:top-0'>
             <div className='flex flex-col'>
                 {
                     sidebarLinks.map((link) => {

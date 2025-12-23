@@ -16,7 +16,7 @@ exports.resetPasswordToken = async (req, res) => {
         if(!user){
             return res.status(404).json({
                 success:false,
-                message:"User not found with this email",
+                message:`This Email: ${email} is not Registered With Us Enter a Valid Email `,
             });
         }
 
@@ -41,7 +41,7 @@ exports.resetPasswordToken = async (req, res) => {
 			            `Your Link for email verification is ${url}. Please click this url to reset your password.`);   // message
 
         // return response
-        return res.status(200).json({
+        res.status(200).json({
             success:true,
             message:"Password reset link sent to your email successfully, please check your email and reset your password within 10 minutes",
         });
@@ -84,12 +84,12 @@ exports.resetPassword = async (req, res) => {
         }
 
         // check for token expiry time
-        if(userDetails.resetPasswordExpires < Date.now()) {
-            return res.status(400).json({
-                success:false,
-                message:"Token expired, please try again",
-            });
-        }
+        if (!(userDetails.resetPasswordExpires > Date.now())) {
+			return res.status(403).json({
+				success: false,
+				message: `Token is Expired, Please Regenerate Your Token`,
+			});
+		}
 
         // hash the new password
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -99,7 +99,7 @@ exports.resetPassword = async (req, res) => {
                                     {password: hashedPassword}, {new:true});
 
         // return response
-        return res.status(200).json({
+        res.status(200).json({
             success:true,
             message:'Password Reset Successfully',
         });
