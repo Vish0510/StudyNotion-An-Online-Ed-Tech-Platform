@@ -41,7 +41,7 @@ StudyNotion is a full-stack Ed-Tech platform that allows students to learn, inst
 - Cloudinary (for media)
 
 **Payment**
-- Razorpay / Stripe (if used)
+- Razorpay / Stripe
 
 ---
 
